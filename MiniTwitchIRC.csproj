@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{9320312E-C63E-4299-B361-CA2DCE35E51F}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MiniTwitchIRC</RootNamespace>
+    <AssemblyName>MiniTwitchIRC</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Compile Include="TwitchUser.cs" />
+    <Compile Include="TwitchIrcGlobal.cs" />
+    <Compile Include="TwitchIrcClient.cs" />
+    <Compile Include="TwitchCredentials.cs" />
+    <Compile Include="TwitchCommand.cs" />
+    <Compile Include="MessagePriority.cs" />
+    <Compile Include="IrcChannel.cs" />
+    <Compile Include="Utility\ColorUtility.cs" />
+    <Compile Include="Args\NoticeMessageArg.cs" />
+    <Compile Include="Args\OnConnectedArgs.cs" />
+    <Compile Include="Args\OnDisconnect.cs" />
+    <Compile Include="Args\OnErrorArgs.cs" />
+    <Compile Include="Args\OnRegistered.cs" />
+    <Compile Include="Args\OnUserLeftChannel.cs" />
+    <Compile Include="Args\SubscribeArgs.cs" />
+    <Compile Include="Args\TwitchMessage.cs" />
+    <Compile Include="Args\TwitchPrivateMessage.cs" />
+    <Compile Include="Args\UserChannelArgs.cs" />
+  </ItemGroup>
+</Project>
