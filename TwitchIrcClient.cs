@@ -478,9 +478,6 @@ namespace TwitchIntegration
         {
             SendCommand ("CAP REQ :twitch.tv/tags");
         }
-
-
-
     }
 }
 

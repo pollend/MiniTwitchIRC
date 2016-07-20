@@ -58,4 +58,7 @@
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="mod.json" />
+  </ItemGroup>
 </Project>
