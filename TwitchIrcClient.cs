@@ -51,21 +51,61 @@ namespace TwitchIntegration
             }
         }
 
-       
-        //public event EventHandler<OnDisconnect> Disconnected;
-
-        //public event EventHandler<OnRegistered> Registered;
-
-        //public event EventHandler<ErrorEventArgs> Error;
+        /**
+         * when the client connects
+         **/
         public event EventHandler Connected;
+
+        /**
+         * general notices from the server 
+         * 
+         * msg-id= slow_off, subs_on, already_subs_on, subs_off etc..
+         **/
         public event EventHandler<NoticeMessageArgs> NoticeMessage;
+
+        /**
+         * Messages recieved from twitch
+         **/
         public event EventHandler<TwitchMessage> OnMessage;
+
+        /**
+         * when a user subscribes to a channel
+         **/
         public event EventHandler<SubscribeArgs> OnSubscribe;
+
+        /**
+         * When a user joins the channel
+         **/
         public event EventHandler<UserChannelArgs> OnJoinChannel;
+
+        /**
+         * When a user leaves the channel
+         **/
         public event EventHandler<UserChannelArgs> OnLeaveChannel;
+
+        /**
+         * An ack is sent after a command
+         **/
         public event EventHandler<AcknowledgmentArgs> OnCommandAcknowledge;
+
+        /**
+         * A message is sent when the room state changes 
+         * 
+         * r9k mode
+         * subs-only
+         * slow/delay
+         * broadcaster-lang
+         **/
         public event EventHandler<RoomStateArgs> OnRoomState;
+
+        /**
+         * userstate is returned when a message is send or when joining a channel.
+         **/
         public event EventHandler<UserstateArgs> OnUserstate;
+
+        /**
+         * when the operator status is elevated or de-elevated
+         **/
         public event EventHandler<OperatorArgs> OnOperatorChange;
 
 
