@@ -207,7 +207,7 @@ namespace TwitchIntegration
                         break;
                     }
                     //sleep for a second and then proceede to the next sending cycle
-                    Thread.Sleep ((TIME_LIMIT*1000.0f)/messageLimit);
+                    Thread.Sleep ((int)((TIME_LIMIT*1000.0f)/messageLimit));
 
                     writer.Flush ();
                     MessageQueueMutex.WaitOne ();
