@@ -4,7 +4,7 @@ using TwitchIntegration;
 
 namespace MiniTwitchIRC
 {
-    public class RoomStateArgs
+    public class RoomStateArgs: EventArgs
     {
         public string broadcasterLang { get; private set; }
         public bool r9kMode { get; private set; }

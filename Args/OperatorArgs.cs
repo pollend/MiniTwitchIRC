@@ -2,7 +2,7 @@
 
 namespace TwitchIntegration
 {
-    public class OperatorArgs
+    public class OperatorArgs: EventArgs
     {
         public bool isOperator{ get; private set;}
         public IrcChannel channel { get; private set;}

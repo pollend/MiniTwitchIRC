@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace TwitchIntegration
 {
-    public class UserstateArgs
+    public class UserstateArgs : EventArgs
     {
         public enum UserType{
             Moderator,
