@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TwitchIntegration
 {
-    public class NoticeMessageArg : EventArgs
+    public class NoticeMessageArgs : EventArgs
     {
         public enum Notices{
             SubsOn,
@@ -36,7 +36,7 @@ namespace TwitchIntegration
         public IrcChannel channel{get;private set;}
 
 
-        public NoticeMessageArg (List<KeyValuePair<string,string>> arguments,IrcChannel channel)
+        public NoticeMessageArgs (List<KeyValuePair<string,string>> arguments,IrcChannel channel)
         {
             this.channel = channel;
             foreach (KeyValuePair<string,string> arg in arguments) {

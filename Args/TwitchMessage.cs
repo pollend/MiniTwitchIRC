@@ -51,7 +51,7 @@ namespace TwitchIntegration
                     break;
                 case "color":
                     if(arg.Value.Trim() != "")
-                    color = ColorUtility.hexToColor (arg.Value);
+                        color = ColorUtility.hexToColor (arg.Value);
                     break;
                 case "display-name":
                     this.displayName = arg.Value;

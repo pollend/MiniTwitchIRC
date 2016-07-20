@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Text;
 using UnityEngine;
+using MiniTwitchIRC;
 
 namespace TwitchIntegration
 {
@@ -56,12 +57,16 @@ namespace TwitchIntegration
         //public event EventHandler<OnRegistered> Registered;
 
         //public event EventHandler<ErrorEventArgs> Error;
-        public event EventHandler<OnConnectedArgs> Connected;
-        public event EventHandler<NoticeMessageArg> NoticeMessage;
+        public event EventHandler Connected;
+        public event EventHandler<NoticeMessageArgs> NoticeMessage;
         public event EventHandler<TwitchMessage> OnMessage;
         public event EventHandler<SubscribeArgs> OnSubscribe;
         public event EventHandler<UserChannelArgs> OnJoinChannel;
         public event EventHandler<UserChannelArgs> OnLeaveChannel;
+        public event EventHandler<AcknowledgmentArgs> OnCommandAcknowledge;
+        public event EventHandler<RoomStateArgs> OnRoomState;
+        public event EventHandler<UserstateArgs> OnUserstate;
+        public event EventHandler<OperatorArgs> OnOperatorChange;
 
 
         public bool IsConnected { 
@@ -139,36 +144,30 @@ namespace TwitchIntegration
                     }
 
 
-                    int messageLimitPerCycle = Mathf.FloorToInt (messageLimit / TIME_LIMIT);
-                    if(messageLimitPerCycle == 0)
-                        messageLimitPerCycle = 1;
-                    while (messageCount < messageLimit && messageLimitPerCycle > 0) {
+                    while (messageCount < messageLimit){
 
                         MessageQueueMutex.WaitOne ();
                         if (messageQueue.Count > 0) {
 
                             if (messageQueue.Keys [0].isTimeExausted ()) {
 
-                                UnityEngine.Debug.Log("dropped message:" + messageQueue.Values[0]);
+                                UnityEngine.Debug.Log ("dropped message:" + messageQueue.Values [0]);
                                 messageQueue.RemoveAt (0);
+                                MessageQueueMutex.ReleaseMutex ();
                                 return;
                             }
 
 
                             writer.WriteLine (messageQueue.Values [0]);
                             messageQueue.RemoveAt (0);
-                            messageLimitPerCycle--;
                             messageCount++;
-                        } else {
-                            MessageQueueMutex.ReleaseMutex ();
-                            break;
-                        }
+                        } 
+                            
                         MessageQueueMutex.ReleaseMutex ();
-
-
+                        break;
                     }
                     //sleep for a second and then proceede to the next sending cycle
-                    Thread.Sleep (1000);
+                    Thread.Sleep ((TIME_LIMIT*1000.0f)/messageLimit);
 
                     writer.Flush ();
                     MessageQueueMutex.WaitOne ();
@@ -187,7 +186,7 @@ namespace TwitchIntegration
                     if (messageCount > messageLimit) {
                         long diff = 30 * 1000 - stopWatch.ElapsedMilliseconds;
                         if (diff > 0) {
-                            UnityEngine.Debug.Log("hit message limit sleeping for:" + diff);
+                            UnityEngine.Debug.Log ("hit message limit sleeping for:" + diff);
                             Thread.Sleep ((int)diff);
                             //sleep until the limit is reached and then try to send
                         }
@@ -197,6 +196,7 @@ namespace TwitchIntegration
                 }
 
             }
+            UnityEngine.Debug.Log ("Closing sending thread");
                
         }
 
@@ -260,34 +260,50 @@ namespace TwitchIntegration
                         break;
                     case "MODE":
                         {
-                            //TODO: track channels bot is subscibed to
                             index++;
-                            string channel = del [index];
+                            IrcChannel channel = new IrcChannel(del [index]);
                             index++;
                             string op = del [index];
                             index++;
                             TwitchUser localUser = new TwitchUser (del [index]);
-                            UnityEngine.Debug.Log ("you are a mod! your rate limit is now 100");
-                            if (localUser.Equals (this.localUser) && op == "+o") {
+
+
+                            OperatorArgs args = new OperatorArgs(localUser,channel,op == "+o");
+
+                            if (localUser.Equals (this.localUser) && args.isOperator) {
+                                UnityEngine.Debug.Log ("you are a mod! your rate limit is now 100");
                                 isMod = true;
                             } else if (localUser.Equals (this.localUser) && op == "-o") {
                                 isMod = false;
                             }
+                            if(OnOperatorChange != null)
+                                OnOperatorChange(this,args);
                         }
                         break;
                     case "NOTICE":
                         {
                             index++;
-                            string channel = del [index].Substring (1);
+                            IrcChannel channel = new IrcChannel(del [index]);
                             if (NoticeMessage != null)
-                                NoticeMessage (this, new NoticeMessageArg (arguments, new IrcChannel (channel)));
+                                NoticeMessage (this, new NoticeMessageArgs (arguments, channel));
                         }
                         break;
                     case "ROOMSTATE":
-                    //TODO: needs to be implemented
+                        {
+                            index++;
+                            IrcChannel channel = new IrcChannel(del [index]);
+                            if(OnRoomState != null)
+                                OnRoomState(this,new RoomStateArgs(line,arguments,channel));
+                            
+                        }
                         break;
                     case "USERSTATE":
-                    //TODO: add user state
+                        {
+                            index++;
+                            IrcChannel channel = new IrcChannel(del [index]);
+                            if(OnUserstate != null)
+                                OnUserstate(this, new UserstateArgs(line,arguments,channel));
+                        }
                         break;
                     case "USERNOTICE":
                         {
@@ -309,15 +325,25 @@ namespace TwitchIntegration
                                 index++;
                                 string payload = del [index].Substring (1);
                                 switch (payload) {
-                                case "twitch.tv/commands":
+                                case "twitch.tv/membership":
+                                    if (OnCommandAcknowledge != null)
+                                        OnCommandAcknowledge (this, new AcknowledgmentArgs (AcknowledgmentArgs.Ack.Membership));
                                     break;
+                                case "twitch.tv/commands":
+                                    if (OnCommandAcknowledge != null)
+                                        OnCommandAcknowledge (this, new AcknowledgmentArgs (AcknowledgmentArgs.Ack.Command));
+                                    break;                                    
+                                case "twitch.tv/tags":
+                                    if (OnCommandAcknowledge != null)
+                                        OnCommandAcknowledge (this, new AcknowledgmentArgs (AcknowledgmentArgs.Ack.tags));
+                                    break;                                    
                                 }
                             }
                         }
                         break;
                     case "372":
                         if (Connected != null)
-                            Connected.Invoke (this, new OnConnectedArgs ());
+                            Connected.Invoke (this, new EventArgs ());
                         break;
                     case "421":
                         UnityEngine.Debug.Log (line);
@@ -332,7 +358,7 @@ namespace TwitchIntegration
                     UnityEngine.Debug.Log (e.Message);
                 }
             }
-            UnityEngine.Debug.Log ("closing sending thread");
+            UnityEngine.Debug.Log ("Closing processing thread");
         }
 
         private string GetMessage (int index, string[] del)

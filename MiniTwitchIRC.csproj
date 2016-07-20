@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProjectGuid>{9320312E-C63E-4299-B361-CA2DCE35E51F}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>MiniTwitchIRC</RootNamespace>
     <AssemblyName>MiniTwitchIRC</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -37,15 +37,25 @@
     <Compile Include="MessagePriority.cs" />
     <Compile Include="IrcChannel.cs" />
     <Compile Include="Utility\ColorUtility.cs" />
-    <Compile Include="Args\NoticeMessageArg.cs" />
-    <Compile Include="Args\OnConnectedArgs.cs" />
-    <Compile Include="Args\OnDisconnect.cs" />
-    <Compile Include="Args\OnErrorArgs.cs" />
-    <Compile Include="Args\OnRegistered.cs" />
-    <Compile Include="Args\OnUserLeftChannel.cs" />
     <Compile Include="Args\SubscribeArgs.cs" />
     <Compile Include="Args\TwitchMessage.cs" />
-    <Compile Include="Args\TwitchPrivateMessage.cs" />
     <Compile Include="Args\UserChannelArgs.cs" />
+    <Compile Include="Args\RoomStateArgs.cs" />
+    <Compile Include="Args\AcknowledgmentArgs.cs" />
+    <Compile Include="Args\NoticeMessageArgs.cs" />
+    <Compile Include="Args\UserstateArgs.cs" />
+    <Compile Include="Args\OperatorArgs.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\..\Parkitect_Data\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\Parkitect_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\Parkitect_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
   </ItemGroup>
 </Project>
