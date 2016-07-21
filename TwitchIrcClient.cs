@@ -54,7 +54,7 @@ namespace TwitchIntegration
         /**
          * when the client connects
          **/
-        public event EventHandler Connected;
+        public event EventHandler OnConnected;
 
         /**
          * general notices from the server 
@@ -101,7 +101,7 @@ namespace TwitchIntegration
         /**
          * userstate is returned when a message is send or when joining a channel.
          **/
-        public event EventHandler<UserstateArgs> OnUserstate;
+        public event EventHandler<UserstateArgs> OnUserState;
 
         /**
          * when the operator status is elevated or de-elevated
@@ -341,8 +341,8 @@ namespace TwitchIntegration
                         {
                             index++;
                             IrcChannel channel = new IrcChannel(del [index]);
-                            if(OnUserstate != null)
-                                OnUserstate(this, new UserstateArgs(line,arguments,channel));
+                            if(OnUserState != null)
+                                OnUserState(this, new UserstateArgs(line,arguments,channel));
                         }
                         break;
                     case "USERNOTICE":
@@ -382,8 +382,8 @@ namespace TwitchIntegration
                         }
                         break;
                     case "372":
-                        if (Connected != null)
-                            Connected.Invoke (this, new EventArgs ());
+                        if (OnConnected != null)
+                            OnConnected.Invoke (this, new EventArgs ());
                         break;
                     case "421":
                         UnityEngine.Debug.Log (line);
