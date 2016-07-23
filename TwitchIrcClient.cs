@@ -388,12 +388,12 @@ namespace TwitchIntegration
                     case "421":
                         UnityEngine.Debug.Log (line);
                         break;
+                    case "PING":
+                        SendCommand ("PONG tmi.twitch.tv");
+                        break;
 
                     }
 
-                    if (line.StartsWith ("PING ")) {
-                        SendCommand (line.Replace ("PING", "PONG"));
-                    }
                 } catch (Exception e) {
                     UnityEngine.Debug.Log (e.Message);
                 }
