@@ -8,21 +8,20 @@ namespace TwitchIntegration
     public struct MessagePriority
     {
         public int priority{ get; private set;}
-        public float timeStamp{ get; private set;}
+        public DateTime timeStamp{ get; private set;}
         public float messageLifeTime{ get; private set;}
        
-        public float GetTimeOfMessage()
+        public TimeSpan GetTimeOfMessage()
         {
-            UnityEngine.Debug.Log (Time.time - timeStamp);
-            return Time.time - timeStamp;
+            return DateTime.Now - timeStamp;
         }
 
         public bool isTimeExausted()
         {
-            return GetTimeOfMessage() > messageLifeTime;
+            return GetTimeOfMessage().TotalSeconds > messageLifeTime;
         }
 
-        public MessagePriority (float messageLifeTime, int priority,float time) : this()
+        public MessagePriority (float messageLifeTime, int priority,DateTime time) : this()
         {
             this.messageLifeTime = messageLifeTime;
             this.priority = priority;

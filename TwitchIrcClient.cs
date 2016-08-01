@@ -144,6 +144,8 @@ namespace TwitchIntegration
             }
 
             //send the password and name
+            if (token.Trim().StartsWith ("oauth:"))
+                token = token.Trim().Substring ("oauth:".Length);
             SendCommand ("PASS oauth:" + token);
             SendCommand ("NICK " + name);
 
@@ -437,7 +439,7 @@ namespace TwitchIntegration
         {
             MessageQueueMutex.WaitOne ();
             if (!TwitchIrcGlobal.blockMessages)
-                messageQueue.Add (new MessagePriority (timeToLive, priority, Time.time), "PRIVMSG #" + channel.channel + " :" + message);
+                messageQueue.Add (new MessagePriority (timeToLive, priority, DateTime.Now), "PRIVMSG #" + channel.channel + " :" + message);
             MessageQueueMutex.ReleaseMutex ();
             sendingHandle.Set ();
         }
@@ -446,7 +448,7 @@ namespace TwitchIntegration
         {
             MessageQueueMutex.WaitOne ();
             if (!TwitchIrcGlobal.blockMessages)
-                messageQueue.Add (new MessagePriority (timeToLive, priority, Time.time), "PRIVMSG #" + channel.channel + " :/w" + " " + user.name + " " + message);
+                messageQueue.Add (new MessagePriority (timeToLive, priority, DateTime.Now), "PRIVMSG #" + channel.channel + " :/w" + " " + user.name + " " + message);
             MessageQueueMutex.ReleaseMutex ();
             sendingHandle.Set ();
         }
