@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using TwitchIntegration;
 
-namespace MiniTwitchIRC
+namespace TwitchIntegration
 {
     public class RoomStateArgs: EventArgs
     {

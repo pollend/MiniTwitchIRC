@@ -8,8 +8,6 @@ using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Text;
 using UnityEngine;
-using MiniTwitchIRC;
-
 namespace TwitchIntegration
 {
     public class TwitchIrcClient
