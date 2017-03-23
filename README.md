@@ -1,21 +1,21 @@
 # MiniTwitchIRC
 
-###Overview
+### Overview
 
 This is suppose to be a very simple twitch integration library for unity and supports features as low as unity 5.3.1f1.
 
 
-##Features
+## Features
 
 - Simple event system for handeling messages
 - A threaded message processing and sending pipeline
 
-##Planned
+## Planned
 
 - need a more robust way to track what channels the bot has subscribed to
 - event handlers for message errors are missing
 
-##Usage
+## Usage
 
 ```
 namespace TwitchIntegration
