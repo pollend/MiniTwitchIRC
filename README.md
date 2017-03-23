@@ -2,7 +2,7 @@
 
 ### Overview
 
-This is suppose to be a very simple twitch integration library for unity and supports features as low as unity 5.3.1f1.
+This is suppose to be a very simple twitch integration library for unity and supports versions of unity as low as 5.3.1f1.
 
 
 ## Features
